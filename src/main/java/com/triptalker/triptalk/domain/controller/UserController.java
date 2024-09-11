@@ -24,7 +24,7 @@ public class UserController {
     private final JWTUtil jwtUtil;
 
     @Operation(summary = "카카오 로그인 API")
-    @PostMapping("/v1/kakao-login")
+    @PostMapping("/v1/users/kakao-login")
     public BaseResponse<String> kakaoLogin(@RequestBody RegisterReqDto registerReqDto) {
         System.out.println("start kakao login");
         System.out.println(registerReqDto.getKakaoId());
@@ -34,11 +34,19 @@ public class UserController {
     }
 
     @Operation(summary = "마이페이지 가져오기 API")
-    @GetMapping("/v1/mypage")
+    @GetMapping("/v1/users/mypage")
     public BaseResponse<MypageResDto> getMypage() {
         Long userId = userService.getCurrentUserId();
         MypageResDto mypageResDto = userService.getMypage(userId);
         return new BaseResponse<>(mypageResDto);
+    }
+
+    @Operation(summary = "회원탈퇴 API")
+    @DeleteMapping("/v1/users")
+    public ResponseEntity<String> deleteUser() {
+        Long userId = userService.getCurrentUserId();
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("User deleted successfully");
     }
 
     @Operation(summary = "북마크 가져오기 API")
